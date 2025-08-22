@@ -26,8 +26,6 @@ begin
 
     delete from payments
     where order_id = p_order_id;
-
-    raise notice 'Order % has been cancelled (if not already delivered).', p_order_id;
 end;
 $$;
 call sp_cancel_order(3);
@@ -50,4 +48,5 @@ begin
 end;
 $$;
 call sp_reprice_stale_products(30, 10);  
+
 
