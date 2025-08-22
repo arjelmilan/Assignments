@@ -1,3 +1,4 @@
+--1
 create or replace view vw_recent_orders_30d
 select o.order_id , c.customer_id ,o.order_date, o.status,sum(i.quantity * i.unit_price) as order_total , abs(extract(day from age(CURRENT_DATE,o.order_date))) <= 30 as days
 from customers c 
@@ -7,10 +8,12 @@ where o.status <> 'cancelled' and o.order_date >= current_date - interval '30 da
 group by o.order_id , c.customer_id,o.order_date
 order by o.order_date
 
+--2
 select *
 from products p
 where p.product_id not in(select distinct i.product_id from order_items i)
 
+--3
 select *
 from (select c.city,
 			p.category,
@@ -23,7 +26,7 @@ join products p on p.product_id = i.product_id
 group by c.city,p.category) ranked
 where rnk = 1
 
-
+--4
 select c.customer_id, c.full_name
 from customers c
 where not exists (
@@ -32,3 +35,4 @@ where not exists (
     where o.customer_id = c.customer_id
       and o.status = 'delivered'
 );
+
